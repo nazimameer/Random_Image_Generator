@@ -1,2 +1,3 @@
-"# Auto_Save_App" 
-"# Random_Image_Generator" 
+"Random Image Generator"
+"1. npm install" // for install all dependencies
+"2. npm run dev" // for run the code
