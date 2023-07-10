@@ -11,8 +11,14 @@ const Home = () => {
   const { id } = useParams();
   const [img, setImg] = useState(null);
   useEffect(() => {
-    const Image = `https://images.unsplash.com/${id}`;
-    setImg(Image);
+    const fetchImage = () => {
+      const Image = `https://images.unsplash.com/${id}`;
+      setImg(Image);
+    }
+
+    if(id !== null){
+      fetchImage();
+    }
   }, [id]);
 
   const contentToShare = "Check out this beautiful image from Unsplash!";

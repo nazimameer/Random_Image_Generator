@@ -9,7 +9,9 @@ const Provider = ({ children }) => {
   const [imgId, setImgId] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   useEffect(() => {
+    setIsLoading(true)
     const fetchId = async () => {
+      
       try {
         const response = await axios.get(
           "https://source.unsplash.com/random/520x600/?nature" //This case we don't put it on .env bcz its a public api
