@@ -1,25 +1,28 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable react/prop-types */
+import axios from "axios";
 import "./Home.css";
-import { Context } from "../../context/Context";
 import { Button, CircularProgress } from "@mui/material";
-import { useState, useEffect, useContext } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
 const Home = () => {
-  const context = useContext(Context);
-  const Navigate = useNavigate();
-  const { id } = useParams();
   const [img, setImg] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
   useEffect(() => {
-    const fetchImage = () => {
-      const Image = `https://images.unsplash.com/${id}`;
-      setImg(Image);
-    }
+    setIsLoading(true);
+    const fetchId = async () => {
+      try {
+        const response = await axios.get(
+          "https://source.unsplash.com/random/520x600/?nature" //This case we don't put it on .env bcz its a public api
+        );
+        let url = response.request.responseURL;
+        setImg(url);
+        setIsLoading(false);
+      } catch (error) {
+        console.log("Something went wrong while fetching ImageId: " + error);
+      }
+    };
 
-    if(id !== null){
-      fetchImage();
-    }
-  }, [id]);
+    fetchId();
+  }, []);
 
   const contentToShare = "Check out this beautiful image from Unsplash!";
 
@@ -44,10 +47,7 @@ const Home = () => {
     window.open(whatsappShareUrl);
   };
 
-  useEffect(() => {
-    Navigate(`/home/${context.imgId}`);
-  }, [context.imgId]);
-  if (context.isLoading)
+  if (isLoading)
     return (
       <div className="w-full h-screen flex items-center justify-center bg-primary">
         <CircularProgress disableShrink />
