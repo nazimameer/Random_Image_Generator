@@ -1,60 +1,46 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import axios from "axios";
-import "./Home.css";
-import { Button, CircularProgress } from "@mui/material";
 import { useState, useEffect } from "react";
+import axios from "axios";
+import { Button, CircularProgress } from "@mui/material";
+import "./Home.css";
 const Home = () => {
   const [img, setImg] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   useEffect(() => {
-    setIsLoading(true);
-    const fetchId = async () => {
+    const fetchImage = async () => {
       try {
         const response = await axios.get(
-          "https://source.unsplash.com/random/520x600/?nature" //This case we don't put it on .env bcz its a public api
+          "https://source.unsplash.com/random/520x600/?nature"
         );
-        let url = response.request.responseURL;
-        setImg(url);
+        const imageUrl = response.request.responseURL;
+        setImg(imageUrl);
         setIsLoading(false);
       } catch (error) {
-        console.log("Something went wrong while fetching ImageId: " + error);
+        console.log("Error fetching image:", error);
+        setIsLoading(false);
       }
     };
 
-    fetchId();
+    fetchImage();
   }, []);
 
   const contentToShare = "Check out this beautiful image from Unsplash!";
+  const encodedImgUrl = encodeURIComponent(img);
+  const encodedContent = encodeURIComponent(contentToShare + " " + img);
 
-  const handleFacebookShare = () => {
-    const facebookShareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
-      img
-    )}`;
-    window.open(facebookShareUrl);
+  const handleShare = (url) => {
+    window.open(url);
   };
 
-  const handleTwitterShare = () => {
-    const twitterShareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(
-      contentToShare
-    )}&url=${encodeURIComponent(img)}`;
-    window.open(twitterShareUrl);
-  };
-
-  const handleWhatsAppShare = () => {
-    const whatsappShareUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(
-      contentToShare + " " + img
-    )}`;
-    window.open(whatsappShareUrl);
-  };
-
-  if (isLoading)
+  if (isLoading) {
     return (
       <div className="w-full h-screen flex items-center justify-center bg-primary">
         <CircularProgress disableShrink />
       </div>
     );
+  }
   return (
-    <div className=" bg-primary w-full h-screen flex flex-col gap-3 items-center justify-center">
+    <div className="bg-primary w-full h-screen flex flex-col gap-3 items-center justify-center">
       <img
         src={img}
         key={img}
@@ -62,15 +48,33 @@ const Home = () => {
         alt="image"
         className="w-[80%] sm:h-[60vh] sm:w-[50%] object-fill"
       />
-      {/* <Button variant="contained">Contained</Button> */}
       <div className="w-full flex items-center justify-center gap-3">
-        <Button variant="contained" onClick={handleWhatsAppShare}>
+        <Button
+          variant="contained"
+          onClick={() =>
+            handleShare(`https://api.whatsapp.com/send?text=${encodedContent}`)
+          }
+        >
           Whatsapp
         </Button>
-        <Button variant="contained" onClick={handleFacebookShare}>
+        <Button
+          variant="contained"
+          onClick={() =>
+            handleShare(
+              `https://www.facebook.com/sharer/sharer.php?u=${encodedImgUrl}`
+            )
+          }
+        >
           Facebook
         </Button>
-        <Button variant="contained" onClick={handleTwitterShare}>
+        <Button
+          variant="contained"
+          onClick={() =>
+            handleShare(
+              `https://twitter.com/intent/tweet?text=${encodedContent}&url=${encodedImgUrl}`
+            )
+          }
+        >
           Twitter
         </Button>
       </div>
