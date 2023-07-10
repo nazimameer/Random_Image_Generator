@@ -9,6 +9,7 @@ const App = () => (
       <Route path="/" exact element={<LandingPage />} />
       <Route path="/home" element={<Navigator />} />
       <Route path="/home/:id" element={<Home />} />
+      <Route path="/home/null" element={<Navigator/>} />
     </Routes>
   </BrowserRouter>
 );
