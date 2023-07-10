@@ -5,12 +5,12 @@ export const navLinks = [
     id: "home",
     title: "Home",
     url: "/",
-  },
-  {
-    id: "get started",
-    title: "Get Started",
-    url: "/home",
-  },
+  }
+  // {
+  //   id: "get started",
+  //   title: "Get Started",
+  //   url: "/home",
+  // },
 ];
 
 export const footerLinks = [
